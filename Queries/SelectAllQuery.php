@@ -49,8 +49,14 @@ final class SelectAllQuery implements Query
         $this->row    = $origin->row;
     }
 
-    public function query($row)
+    public function query($row=array())
     {
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }
+        if (empty($this->table)) {
+            throw new QueryException("Table  property cannot be empty");
+        }
         return "SELECT * FROM {$this->table}";
     }
 
