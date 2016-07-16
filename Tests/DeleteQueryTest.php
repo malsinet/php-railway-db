@@ -58,6 +58,13 @@ class DeleteQueryTest extends TestCase
         $delete->query();
     }
     
+	public function testEmptyOriginThrowsException()
+	{
+        $delete = new Queries\DeleteQuery($origin=null);
+        $this->expectException(Queries\QueryException::class);
+        $delete->query();
+    }
+    
 	public function testValidDeleteQuery()
 	{
         $delete = new Queries\DeleteQuery(

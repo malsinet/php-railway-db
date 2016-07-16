@@ -58,6 +58,9 @@ final class DeleteQuery implements Query
         if (empty($this->pk)) {
             throw new QueryException("Primary key property cannot be empty");
         }
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }
         return  "DELETE {$this->table} WHERE {$this->pk} = :{$this->pk}";
     }
 
