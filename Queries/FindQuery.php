@@ -51,6 +51,15 @@ final class FindQuery implements Query
 
     public function query($row)
     {
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }
+        if (empty($this->table)) {
+            throw new QueryException("Exclusion field property cannot be empty");
+        }
+        if (empty($this->row)) {
+            throw new QueryException("Row object property cannot be empty");
+        }
         $predicates = $this->row->toPredicates($row);
         return "SELECT * FROM {$this->table} WHERE {$predicates}";
     }
