@@ -1,7 +1,7 @@
 <?php
 
 /**
- * BaseQuery class file
+ * QueryException class file
  *
  * @category   Queries
  * @package    Railway Database
@@ -15,13 +15,11 @@
 
 namespace github\malsinet\Railway\Database\Queries;
 
-use github\malsinet\Railway\Database\Contracts\Query;
-
 
 /**
- * BaseQuery class
+ * Validation Exception class
  *
- * BaseQuery returns an empty query 
+ * Basic Request class 
  *
  * @category   Queries
  * @package    Railway Database
@@ -31,25 +29,17 @@ use github\malsinet\Railway\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class BaseQuery implements Query
-{
-
-    public $table;
-
-    public $pk;
-    
-    public $row;
-    
-    public function __construct($table, $pk, $row)
-    {
-        $this->table = $table;
-        $this->pk    = $pk;
-        $this->row   = $row;
-    }
-
-    public function query($row=array())
-    {
-        return "";
-    }
-
+final class QueryException extends \Exception
+{    
+    /**
+     * Class constructor
+     *
+     * @param string    $message  Exception message
+     * @param int       $code     Exception code
+     * @param Exception $previous Previous exception
+     */
+    public function __construct($message, $code = 0, Exception $previous = null) {
+        parent::__construct($message, $code, $previous);
+    }   
 }
+

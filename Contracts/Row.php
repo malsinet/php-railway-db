@@ -29,7 +29,7 @@ namespace github\malsinet\Railway\Database\Contracts;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-interface Row;
+interface Row
 {
     public function toFields($row);
     

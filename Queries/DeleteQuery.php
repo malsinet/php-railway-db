@@ -15,7 +15,7 @@
 
 namespace github\malsinet\Railway\Database\Queries;
 
-use github\malsinet\Database\Contracts\Query;
+use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
@@ -32,7 +32,7 @@ use github\malsinet\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class DeleteQuery implements Query;
+final class DeleteQuery implements Query
 {
     private $origin;
 
@@ -50,8 +50,14 @@ final class DeleteQuery implements Query;
         $this->row    = $origin->row;
     }
 
-    public function query($row)
+    public function query($row=array())
     {
+        if (empty($this->table)) {
+            throw new QueryException("Table name property cannot be empty");
+        }
+        if (empty($this->pk)) {
+            throw new QueryException("Primary key property cannot be empty");
+        }
         return  "DELETE {$this->table} WHERE {$this->pk} = :{$this->pk}";
     }
 

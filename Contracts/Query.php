@@ -13,7 +13,7 @@
  */
 
 
-namespace github\malsinet\Railway\Contracts;
+namespace github\malsinet\Railway\Database\Contracts;
 
 
 /**
@@ -31,5 +31,5 @@ namespace github\malsinet\Railway\Contracts;
  */
 interface Query
 {
-    public function query();
+    public function query($row);
 }

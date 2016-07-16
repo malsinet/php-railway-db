@@ -29,7 +29,7 @@ namespace github\malsinet\Railway\Database;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class RowTowQuery implements Contracts\Row;
+final class RowToQuery implements Contracts\Row
 {
     
     public function toFields($row)
