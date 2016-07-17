@@ -15,7 +15,7 @@
 
 namespace github\malsinet\Railway\Database\Queries;
 
-use github\malsinet\Database\Contracts\Query;
+use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
@@ -32,7 +32,7 @@ use github\malsinet\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class SoftDeleteQuery implements Query;
+final class SoftDeleteQuery implements Query
 {
     private $origin;
 
@@ -56,9 +56,24 @@ final class SoftDeleteQuery implements Query;
         $this->value  = $value;
     }
 
-    public function query($row)
+    public function query($row=array())
     {
-        return "UPDATE {$this->table} SET {$this->field} = '{$this->value}'  WHERE {$this->pk} = :{$this->pk}";
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }
+        if (empty($this->table)) {
+            throw new QueryException("Query table property cannot be empty");
+        }
+        if (empty($this->pk)) {
+            throw new QueryException("Query pk property cannot be empty");
+        }
+        if (empty($this->field)) {
+            throw new QueryException("Query field property cannot be empty");
+        }
+        if (empty($this->value)) {
+            throw new QueryException("Query value property cannot be empty");
+        }
+        return "UPDATE {$this->table} SET {$this->field} = '{$this->value}' WHERE ({$this->pk} = :{$this->pk})";
     }
 
 }
