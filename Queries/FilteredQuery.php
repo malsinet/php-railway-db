@@ -15,7 +15,7 @@
 
 namespace github\malsinet\Railway\Database\Queries;
 
-use github\malsinet\Database\Contracts\Query;
+use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
@@ -31,7 +31,7 @@ use github\malsinet\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class FilteredQuery implements Query;
+final class FilteredQuery implements Query
 {
     private $origin;
 
@@ -55,13 +55,22 @@ final class FilteredQuery implements Query;
         $this->value  = $value;
     }
 
-    public function query($row)
+    public function query($row=array())
     {
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }
+        if (empty($this->field)) {
+            throw new QueryException("Query field property cannot be empty");
+        }
+        if (empty($this->value)) {
+            throw new QueryException("Query value property cannot be empty");
+        }
         $query = $this->origin->query($row);
-        if (preg_match("/ WHERE /i")) {
-            $query.= "AND ({$field} = '{$value}')"; 
+        if (preg_match("/ WHERE /i", $query)) {
+            $query.= " AND ({$this->field} = '{$this->value}')"; 
         } else {
-            $query.= "WHERE ({$field} = '{$value}')"; 
+            $query.= " WHERE ({$this->field} = '{$this->value}')"; 
         }
         return $query;
     }
