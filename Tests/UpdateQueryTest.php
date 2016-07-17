@@ -46,7 +46,7 @@ class UpdateQueryTest extends TestCase
 	public function testEmptyTableThrowsException()
 	{
         $update = new Queries\UpdateQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             )
         );
@@ -57,7 +57,7 @@ class UpdateQueryTest extends TestCase
 	public function testEmptyPkThrowsException()
 	{
         $update = new Queries\UpdateQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="", new RowToQuery()
             )
         );
@@ -68,7 +68,7 @@ class UpdateQueryTest extends TestCase
 	public function testEmptyRowThrowsException()
 	{
         $update = new Queries\UpdateQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", $row=null
             ) 
         );
@@ -79,7 +79,7 @@ class UpdateQueryTest extends TestCase
 	public function testValidUpdateQuery()
 	{
         $update = new Queries\UpdateQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ) 
         );

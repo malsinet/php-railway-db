@@ -46,7 +46,7 @@ class PdoTableInsertRowTest extends TestCase
             $this->db,
             new DB\TableQueries(
                 new DB\Queries\InsertQuery(
-                    new DB\Queries\BaseQuery(
+                    new DB\Queries\Base(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )
                 ),

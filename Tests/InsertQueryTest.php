@@ -46,7 +46,7 @@ class InsertQueryTest extends TestCase
 	public function testEmptyTableThrowsException()
 	{
         $insert = new Queries\InsertQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             )
         );
@@ -57,7 +57,7 @@ class InsertQueryTest extends TestCase
 	public function testEmptyRowThrowsException()
 	{
         $insert = new Queries\InsertQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", $row=null
             ) 
         );
@@ -68,7 +68,7 @@ class InsertQueryTest extends TestCase
 	public function testValidInsertQuery()
 	{
         $insert = new Queries\InsertQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ) 
         );

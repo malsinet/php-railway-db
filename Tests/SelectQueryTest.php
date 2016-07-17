@@ -46,7 +46,7 @@ class SelectQueryTest extends TestCase
 	public function testEmptyTableThrowsException()
 	{
         $select = new Queries\SelectQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             )
         );
@@ -57,7 +57,7 @@ class SelectQueryTest extends TestCase
 	public function testEmptyRowThrowsException()
 	{
         $select = new Queries\SelectQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", $row=null
             ) 
         );
@@ -68,7 +68,7 @@ class SelectQueryTest extends TestCase
 	public function testValidSelectQuery()
 	{
         $select = new Queries\SelectQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ) 
         );

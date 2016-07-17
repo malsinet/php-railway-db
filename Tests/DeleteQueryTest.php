@@ -39,7 +39,7 @@ class DeleteQueryTest extends TestCase
 	public function testEmptyTableThrowsException()
 	{
         $delete = new Queries\DeleteQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             )
         );
@@ -50,7 +50,7 @@ class DeleteQueryTest extends TestCase
 	public function testEmptyPkThrowsException()
 	{
         $delete = new Queries\DeleteQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="", new RowToQuery()
             )
         );
@@ -68,7 +68,7 @@ class DeleteQueryTest extends TestCase
 	public function testValidDeleteQuery()
 	{
         $delete = new Queries\DeleteQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             )
         );

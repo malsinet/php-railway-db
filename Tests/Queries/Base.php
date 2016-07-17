@@ -1,9 +1,9 @@
 <?php
 
 /**
- * BaseQuery Test file
+ * Base Test file
  *
- * @category   Tests
+ * @category   Query Tests
  * @package    Railway Database
  * @author     Martin Alsinet <martin@alsinet.com.ar>
  * @copyright  2016 @MartinAlsinet
@@ -13,7 +13,7 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\Queries;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database\Queries;
@@ -24,7 +24,7 @@ use github\malsinet\Railway\Database\Queries;
  *
  * Test should return true
  *
- * @category   Tests
+ * @category   Query Tests
  * @package    Railway Database
  * @author     Martin Alsinet <martin@alsinet.com.ar>
  * @copyright  2016 @MartinAlsinet
@@ -32,14 +32,14 @@ use github\malsinet\Railway\Database\Queries;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-validations
  */
-class BaseQueryTest extends TestCase
+class BaseTest extends TestCase
 {
 
-	public function testBaseQueryReturnsEmptyString()
+	public function testBaseReturnsEmptyString()
 	{
-        $base = new Queries\BaseQuery($table="user", $pk="id", $row);
+        $base = new Queries\Base($table="user", $pk="id", $row);
 
-        $this->assertEquals("", $base->query(), "BaseQuery should always return an empty string");
+        $this->assertEquals("", $base->query(), "Base should always return an empty string");
     }
 
 }

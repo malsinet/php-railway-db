@@ -48,7 +48,7 @@ class SoftDeleteQueryTest extends TestCase
 	public function testEmptyTableThrowsException()
 	{
         $delete = new Queries\SoftDeleteQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             ), $field="status", $value="DELETED"
         );
@@ -59,7 +59,7 @@ class SoftDeleteQueryTest extends TestCase
 	public function testEmptyPkThrowsException()
 	{
         $delete = new Queries\SoftDeleteQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="", new RowToQuery()
             ), $field="status", $value="DELETED"
         );
@@ -70,7 +70,7 @@ class SoftDeleteQueryTest extends TestCase
 	public function testEmptyFieldThrowsException()
 	{
         $delete = new Queries\SoftDeleteQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ), $field="", $value="DELETED"
         );
@@ -81,7 +81,7 @@ class SoftDeleteQueryTest extends TestCase
 	public function testEmptyValueThrowsException()
 	{
         $delete = new Queries\SoftDeleteQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ), $field="status", $value=""
         );
@@ -92,7 +92,7 @@ class SoftDeleteQueryTest extends TestCase
 	public function testValidSoftDeleteQuery()
 	{
         $delete = new Queries\SoftDeleteQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ), $field="status", $value="DELETED"
         );

@@ -54,7 +54,7 @@ class PdoTableFindRowByFieldsTest extends TestCase
                 $insert=null, 
                 $select=null,
                 new DB\Queries\FindQuery(
-                    new DB\Queries\BaseQuery(
+                    new DB\Queries\Base(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )
                 ),

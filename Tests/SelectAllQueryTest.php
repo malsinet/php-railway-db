@@ -39,7 +39,7 @@ class SelectAllQueryTest extends TestCase
 	public function testEmptyTableThrowsException()
 	{
         $select = new Queries\SelectAllQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             )
         );
@@ -57,7 +57,7 @@ class SelectAllQueryTest extends TestCase
 	public function testValidSelectAllQuery()
 	{
         $select = new Queries\SelectAllQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             )
         );

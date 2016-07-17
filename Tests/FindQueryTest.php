@@ -39,7 +39,7 @@ class FindQueryTest extends TestCase
 	public function testEmptyTableThrowsException()
 	{
         $find = new Queries\FindQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             )
         );
@@ -50,7 +50,7 @@ class FindQueryTest extends TestCase
 	public function testEmptyRowThrowsException()
 	{
         $find = new Queries\FindQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", $row=null
             )
         );
@@ -68,7 +68,7 @@ class FindQueryTest extends TestCase
 	public function testValidFindQuery()
 	{
         $find = new Queries\FindQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             )
         );

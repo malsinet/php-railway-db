@@ -53,7 +53,7 @@ class PdoTableSelectRowsTest extends TestCase
             new DB\TableQueries(
                 $insert=null,
                 new DB\Queries\SelectAllQuery(
-                    new DB\Queries\BaseQuery(
+                    new DB\Queries\Base(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )
                 ),

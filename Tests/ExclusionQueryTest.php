@@ -39,7 +39,7 @@ class ExclusionQueryTest extends TestCase
 	public function testEmptyFieldThrowsException()
 	{
         $exclusion = new Queries\ExclusionQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ),
             $field="",
@@ -52,7 +52,7 @@ class ExclusionQueryTest extends TestCase
 	public function testEmptyValueThrowsException()
 	{
         $exclusion = new Queries\ExclusionQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ),
             $field="status",
@@ -76,7 +76,7 @@ class ExclusionQueryTest extends TestCase
  	public function testWhereExclusionQuery()
 	{
         $exclusion = new Queries\ExclusionQuery(
-            new Queries\BaseQuery(
+            new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ),
             $field="status",
@@ -89,7 +89,7 @@ class ExclusionQueryTest extends TestCase
 	{
         $exclusion = new Queries\ExclusionQuery(
             new Queries\FindQuery(
-                new Queries\BaseQuery(
+                new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
             ), $field="status", $value="DELETED"

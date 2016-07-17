@@ -47,7 +47,7 @@ class OrderedQueryTest extends TestCase
 	{
         $ordered = new Queries\OrderedQuery(
             new Queries\SelectAllQuery(
-                new Queries\BaseQuery(
+                new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
             ), $orderBy="", $direction="DESC"
@@ -60,7 +60,7 @@ class OrderedQueryTest extends TestCase
 	{
         $ordered = new Queries\OrderedQuery(
             new Queries\SelectAllQuery(
-                new Queries\BaseQuery(
+                new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
             ), $orderBy="date", $direction=""
@@ -73,7 +73,7 @@ class OrderedQueryTest extends TestCase
 	{
         $ordered = new Queries\OrderedQuery(
             new Queries\SelectAllQuery(
-                new Queries\BaseQuery(
+                new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
             ), $orderBy="date", $direction="DESC"

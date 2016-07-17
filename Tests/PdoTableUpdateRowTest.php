@@ -55,7 +55,7 @@ class PdoTableUpdateRowTest extends TestCase
                 $select=null,
                 $find=null,
                 new DB\Queries\UpdateQuery(
-                    new DB\Queries\BaseQuery(
+                    new DB\Queries\Base(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )
                 ),

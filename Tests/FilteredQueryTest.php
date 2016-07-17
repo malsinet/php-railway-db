@@ -51,7 +51,7 @@ class FilteredQueryTest extends TestCase
 	{
         $filtered = new Queries\FilteredQuery(
             new Queries\SelectAllQuery(
-                new Queries\BaseQuery(
+                new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
             ), $field="", $value="ACTIVE"
@@ -64,7 +64,7 @@ class FilteredQueryTest extends TestCase
 	{
         $filtered = new Queries\FilteredQuery(
             new Queries\SelectAllQuery(
-                new Queries\BaseQuery(
+                new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 ) 
             ), $field="status", $value=""
@@ -77,7 +77,7 @@ class FilteredQueryTest extends TestCase
 	{
         $filtered = new Queries\FilteredQuery(
             new Queries\SelectAllQuery(
-                new Queries\BaseQuery(
+                new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 ) 
             ), $field="status", $value="ACTIVE"
@@ -90,7 +90,7 @@ class FilteredQueryTest extends TestCase
         $filtered = new Queries\FilteredQuery(
             new Queries\ExclusionQuery(
                 new Queries\SelectAllQuery(
-                    new Queries\BaseQuery(
+                    new Queries\Base(
                         $table="user", $pk="id", new RowToQuery()
                     )
                 ), $exclude="role", $value="ADMIN"
