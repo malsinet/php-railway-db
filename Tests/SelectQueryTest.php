@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FindQueryTest class file
+ * SelectQueryTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -9,7 +9,7 @@
  * @copyright  2016 @MartinAlsinet
  * @license    MIT License
  * @version    Release: 0.1.0
- * @link       http://github.com/malsinet/railway-validations
+ * @link       http://github.com/malsinet/railway-database
  */
 
 
@@ -21,9 +21,9 @@ use github\malsinet\Railway\Database\Queries;
 
 
 /**
- * FindQueryTest class
+ * SelectQueryTest class
  *
- * Tests checking that correct SELECT queries are returned
+ * Tests checking that a correct ORDER BY clause is added
  *
  * @category   Tests
  * @package    Railway Database
@@ -31,48 +31,50 @@ use github\malsinet\Railway\Database\Queries;
  * @copyright  2016 @MartinAlsinet
  * @license    MIT License
  * @version    Release: 0.1.0
- * @link       http://github.com/malsinet/railway-validations
+ * @link       http://github.com/malsinet/railway-database
  */
-class FindQueryTest extends TestCase
+class SelectQueryTest extends TestCase
 {
 
+	public function testEmptyOriginThrowsException()
+	{
+        $select = new Queries\SelectQuery($origin=null);
+        $this->expectException(Queries\QueryException::class);
+        $select->query(array());
+    }
+    
 	public function testEmptyTableThrowsException()
 	{
-        $find = new Queries\FindQuery(
+        $select = new Queries\SelectQuery(
             new Queries\BaseQuery(
                 $table="", $pk="id", new RowToQuery()
             )
         );
         $this->expectException(Queries\QueryException::class);
-        $find->query($row=array());
+        $select->query(array());
     }
     
 	public function testEmptyRowThrowsException()
 	{
-        $find = new Queries\FindQuery(
+        $select = new Queries\SelectQuery(
             new Queries\BaseQuery(
                 $table="user", $pk="id", $row=null
-            )
+            ) 
         );
         $this->expectException(Queries\QueryException::class);
-        $find->query($row=array());
+        $select->query(array());
     }
     
-	public function testEmptyOriginThrowsException()
+	public function testValidSelectQuery()
 	{
-        $find = new Queries\FindQuery($origin=null);
-        $this->expectException(Queries\QueryException::class);
-        $find->query($row=array());
-    }
-    
-	public function testValidFindQuery()
-	{
-        $find = new Queries\FindQuery(
+        $select = new Queries\SelectQuery(
             new Queries\BaseQuery(
                 $table="user", $pk="id", new RowToQuery()
-            )
+            ) 
         );
-        $this->assertEquals("SELECT * FROM user WHERE (id = :id)", $find->query(array("id" => 23)), "Find query should be valid");
+        $row = array("name" => "Bob Marley", "age" => 27);
+        $this->assertEquals("SELECT * FROM user WHERE (name = :name) AND (age = :age)", $select->query($row), "SelectQuery must be valid");
     }
+
 
 }

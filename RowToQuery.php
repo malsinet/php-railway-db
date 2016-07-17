@@ -46,9 +46,9 @@ final class RowToQuery implements Contracts\Row
     {
         $preds = "";
         foreach ($row as $field => $value) {
-            $preds.= "{$field} = :{$field} AND";
+            $preds.= "({$field} = :{$field}) AND ";
         }
-        $preds = preg_replace("/ AND$/", "", $preds);
+        $preds = preg_replace("/ AND $/", "", $preds);
         return $preds;
     }
 
