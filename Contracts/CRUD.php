@@ -13,7 +13,7 @@
  */
 
 
-namespace github\malsinet\Railway\Contracts;
+namespace github\malsinet\Railway\Database\Contracts;
 
 
 /**

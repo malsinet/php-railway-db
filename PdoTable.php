@@ -38,24 +38,30 @@ final class PdoTable implements Contracts\CRUD
 
     private $row;
     
-    public function __construct(\PDO $db, Contracts\CRUD $queries)
+    public function __construct(\PDO $db, Contracts\CRUD $queries, Contracts\Row $row)
     {
         $this->db      = $db;
         $this->queries = $queries;
         $this->row     = $row;
     }
 
-    public function insertRow($row)
+    public function insertRow($fields)
     {
-        $query = $this->queries->insertRow($row);
+        if (!is_array($fields)) {
+            throw new DatabaseException("Fields parameter [$fields] must be an array");
+        }
+        $query = $this->queries->insertRow($fields);
         $stmt  = $this->db->prepare($query);
-        $binds = $this->row->toBinds($row);
+        $binds = $this->row->toBinds($fields);
         $stmt->execute($binds);
         return $this->db->lastInsertId();
     }
 
     public function selectRows($fields=array())
     {
+        if (!is_array($fields)) {
+            throw new DatabaseException("Fields parameter [$fields] must be an array");
+        }
         $query = $this->queries->selectRows($fields);
         $stmt  = $this->db->prepare($query);
         $stmt->execute();
@@ -66,6 +72,9 @@ final class PdoTable implements Contracts\CRUD
 
     public function findRowByFields($fields)
     {
+        if (!is_array($fields)) {
+            throw new DatabaseException("Fields parameter [$fields] must be an array");
+        }
         $query = $this->queries->findRowByFields($fields);
         $stmt  = $this->db->prepare($query);
         $binds = $this->row->toBinds($fields);
@@ -74,17 +83,23 @@ final class PdoTable implements Contracts\CRUD
         return $row;
     }
 
-    public function updateRow($row)
+    public function updateRow($fields)
     {
-        $query = $this->queries->updateRow($row);
+        if (!is_array($fields)) {
+            throw new DatabaseException("Fields parameter [$fields] must be an array");
+        }
+        $query = $this->queries->updateRow($fields);
         $stmt  = $this->db->prepare($query);
-        $binds = $this->row->toBinds($row);
+        $binds = $this->row->toBinds($fields);
         $stmt->execute($binds);
         return;
     }
 
-    public function deleteRow($row)
+    public function deleteRow($fields)
     {
+        if (!is_array($fields)) {
+            throw new DatabaseException("Fields parameter [$fields] must be an array");
+        }
         $query = $this->queries->deleteRow($row);
         $stmt  = $this->db->prepare($query);
         $binds = $this->row->toBinds($row);
