@@ -34,16 +34,25 @@ final class RowToQuery implements Contracts\Row
     
     public function toFields($row)
     {
+        if (!is_array($row)) {
+            throw new DatabaseException("Row [$row] must be an array");
+        }
         return implode(",", array_keys($row));
     }
 
     public function toValues($row)
     {
+        if (!is_array($row)) {
+            throw new DatabaseException("Row [$row] must be an array");
+        }
         return implode(",", array_map(function($s){return ":".$s;}, array_keys($row)));
     }
 
     public function toPredicates($row)
     {
+        if (!is_array($row)) {
+            throw new DatabaseException("Row [$row] must be an array");
+        }
         $preds = "";
         foreach ($row as $field => $value) {
             $preds.= "({$field} = :{$field}) AND ";
@@ -54,6 +63,9 @@ final class RowToQuery implements Contracts\Row
 
     public function toBinds($row)
     {
+        if (!is_array($row)) {
+            throw new DatabaseException("Row [$row] must be an array");
+        }
         $binds = array();
         foreach ($row as $field => $value) {
             $binds[":".$field] = $value;
@@ -63,6 +75,9 @@ final class RowToQuery implements Contracts\Row
 
     public function toUpdate($row, $idField)
     {
+        if (!is_array($row)) {
+            throw new DatabaseException("Row [$row] must be an array");
+        }
         $update = "";
         foreach ($row as $field => $value) {
             if ($field!=$idField) {
