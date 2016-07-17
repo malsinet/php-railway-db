@@ -1,7 +1,7 @@
 <?php
 
 /**
- * PdoTableUpdateRowTest class file
+ * PdoTableDeleteRowTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -20,9 +20,9 @@ use github\malsinet\Railway\Database as DB;
 
 
 /**
- * PdoTableUpdateRowTest class
+ * PdoTableDeleteRowTest class
  *
- * Tests checking PdoTable updateRow
+ * Tests checking PdoTable::deleteRow
  *
  * @category   Tests
  * @package    Railway Database
@@ -32,7 +32,7 @@ use github\malsinet\Railway\Database as DB;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-class PdoTableUpdateRowTest extends TestCase
+class PdoTableDeleteRowTest extends TestCase
 {
 
     public function setUp()
@@ -77,10 +77,10 @@ class PdoTableUpdateRowTest extends TestCase
         $this->table->findRowByFields("this is a string");
     }
     
-	public function testUpdateRow()
+	public function testDeleteRow()
 	{
-        $fields   = array("id" => 2, "name" => "Slash Rocks!");
-        $this->table->updateRow($fields);
+        $fields   = array("id" => 2);
+        $this->table->deleteRow($fields);
 
         $query = "SELECT * FROM users";
         $sth = $this->db->prepare($query);
@@ -89,18 +89,17 @@ class PdoTableUpdateRowTest extends TestCase
         
         $expected = array(
             array("id" => 1, "name" => "Axl", "age" => 50),
-            array("id" => 2, "name" => "Slash Rocks!", "age" => 51),
             array("id" => 3, "name" => "Duff", "age" => 52),
             array("id" => 4, "name" => "Izzy", "age" => 53),
             array("id" => 5, "name" => "Steven", "age" => 54)
         );
-        $this->assertEquals($expected, $result, "Should Update one row");
+        $this->assertEquals($expected, $result, "Should delete one row");
     }
 
-	public function testCannotUpdateRowWithoutIdField()
+	public function testCantDeleteRowWithoutIdField()
 	{
-        $fields   = array("name" => "Matt Sorum?");
-        $this->table->updateRow($fields);
+        $fields   = array("name" => "Axl");
+        $this->table->deleteRow($fields);
 
         $query = "SELECT * FROM users";
         $sth = $this->db->prepare($query);
@@ -114,7 +113,7 @@ class PdoTableUpdateRowTest extends TestCase
             array("id" => 4, "name" => "Izzy", "age" => 53),
             array("id" => 5, "name" => "Steven", "age" => 54)
         );
-        $this->assertEquals($expected, $result, "Should not update anything");
+        $this->assertEquals($expected, $result, "Should not delete anything");
     }
 
 }
