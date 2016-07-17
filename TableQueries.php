@@ -58,7 +58,7 @@ final class TableQueries implements Contracts\CRUD
 
     public function selectRows($matches)
     {
-        return $this->select->query(array());
+        return $this->select->query($matches);
     }
 
     public function findRowByFields($matches)
