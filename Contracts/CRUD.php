@@ -31,7 +31,6 @@ namespace github\malsinet\Railway\Database\Contracts;
  */
 interface CRUD
 {
-
     public function insertRow($row);
 
     public function selectRows($conditions);
@@ -41,5 +40,4 @@ interface CRUD
     public function updateRow($row);
 
     public function deleteRow($row);
-
 }

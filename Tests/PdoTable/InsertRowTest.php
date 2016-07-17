@@ -1,7 +1,7 @@
 <?php
 
 /**
- * PdoTableDeleteRowTest class file
+ * InsertRowTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -13,16 +13,16 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\PdoTable;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database as DB;
 
 
 /**
- * PdoTableDeleteRowTest class
+ * InsertRowTest class
  *
- * Tests checking PdoTable::deleteRow
+ * Tests checking  insertRow
  *
  * @category   Tests
  * @package    Railway Database
@@ -32,7 +32,7 @@ use github\malsinet\Railway\Database as DB;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-class PdoTableDeleteRowTest extends TestCase
+class InsertRowTest extends TestCase
 {
 
     public function setUp()
@@ -42,24 +42,18 @@ class PdoTableDeleteRowTest extends TestCase
             \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION
         );
         $this->db->exec("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)");
-        $this->db->exec("INSERT INTO users (name, age) VALUES ('Axl', 50)");
-        $this->db->exec("INSERT INTO users (name, age) VALUES ('Slash', 51)");
-        $this->db->exec("INSERT INTO users (name, age) VALUES ('Duff', 52)");
-        $this->db->exec("INSERT INTO users (name, age) VALUES ('Izzy', 53)");
-        $this->db->exec("INSERT INTO users (name, age) VALUES ('Steven', 54)");
-        
         $this->table = new DB\PdoTable(
             $this->db,
             new DB\TableQueries(
-                $insert=null, 
-                $select=null,
-                $find=null,
-                $update=null,
-                new DB\Queries\Delete(
+                new DB\Queries\Insert(
                     new DB\Queries\Base(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )
-                )
+                ),
+                $select=null,
+                $find=null,
+                $update=null,
+                $delete=null
             ),
             new DB\RowToQuery()
         );
@@ -74,33 +68,27 @@ class PdoTableDeleteRowTest extends TestCase
 	public function testEmptyFieldsParameterThrowsException()
 	{
         $this->expectException(DB\DatabaseException::class);
-        $this->table->findRowByFields("this is a string");
+        $this->table->insertRow($fields=null);
     }
     
-	public function testDeleteRow()
+	public function testInsertRow()
 	{
-        $fields   = array("id" => 2);
-        $this->table->deleteRow($fields);
-
-        $query = "SELECT * FROM users";
+        $rows = array(
+            array("name" => "John", "age" => 70),
+            array("name" => "Paul", "age" => 69),
+            array("name" => "George", "age" => 68),
+            array("name" => "Ringo", "age" => 67)
+        );
+        foreach ($rows as $row) {
+            $this->table->insertRow($row);
+        }
+        $query = "SELECT name, age FROM users";
         $sth = $this->db->prepare($query);
         $sth->execute();
         $result = $sth->fetchAll(\PDO::FETCH_ASSOC);
-        
-        $expected = array(
-            array("id" => 1, "name" => "Axl", "age" => 50),
-            array("id" => 3, "name" => "Duff", "age" => 52),
-            array("id" => 4, "name" => "Izzy", "age" => 53),
-            array("id" => 5, "name" => "Steven", "age" => 54)
-        );
-        $this->assertEquals($expected, $result, "Should delete one row");
-    }
 
-	public function testCantDeleteRowWithoutIdField()
-	{
-        $fields = array("name" => "Axl");
-        $this->expectException(\PdoException::class);
-        $this->table->deleteRow($fields);
+        $this->assertEquals($rows, $result, "Should insert 4 rows");
+        
     }
 
 }

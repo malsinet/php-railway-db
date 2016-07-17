@@ -1,7 +1,7 @@
 <?php
 
 /**
- * PdoTableFindRowByFieldsTest class file
+ * DeleteRowTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -13,16 +13,16 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\PdoTable;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database as DB;
 
 
 /**
- * PdoTableFindRowByFieldsTest class
+ * DeleteRowTest class
  *
- * Tests checking PdoTable findRowByFields
+ * Tests checking ::deleteRow
  *
  * @category   Tests
  * @package    Railway Database
@@ -32,7 +32,7 @@ use github\malsinet\Railway\Database as DB;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-class PdoTableFindRowByFieldsTest extends TestCase
+class DeleteRowTest extends TestCase
 {
 
     public function setUp()
@@ -53,13 +53,13 @@ class PdoTableFindRowByFieldsTest extends TestCase
             new DB\TableQueries(
                 $insert=null, 
                 $select=null,
-                new DB\Queries\FindQuery(
+                $find=null,
+                $update=null,
+                new DB\Queries\Delete(
                     new DB\Queries\Base(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )
-                ),
-                $update=null,
-                $delete=null
+                )
             ),
             new DB\RowToQuery()
         );
@@ -77,25 +77,30 @@ class PdoTableFindRowByFieldsTest extends TestCase
         $this->table->findRowByFields("this is a string");
     }
     
-	public function testFindRowByOneField()
+	public function testDeleteRow()
 	{
-        $expected = array("id" => 2, "name" => "Slash", "age" => 51);
         $fields   = array("id" => 2);
-        $this->assertEquals($expected, $this->table->findRowByFields($fields), "Should Find one row");
-    }
+        $this->table->deleteRow($fields);
 
-	public function testFindRowByTwoFields()
-	{
-        $expected = array("id" => 1, "name" => "Axl", "age" => 50);
-        $fields   = array("id" => 1, "name" => "Axl");
-        $this->assertEquals($expected, $this->table->findRowByFields($fields), "Should Find one row");
-    }
-
-	public function testFindRowByFieldsNotFound()
-	{
-        $fields = array("id" => 1, "name" => "Lars");
-        $this->assertEquals(array(), $this->table->findRowByFields($fields), "Should not find an inexistent row");
+        $query = "SELECT * FROM users";
+        $sth = $this->db->prepare($query);
+        $sth->execute();
+        $result = $sth->fetchAll(\PDO::FETCH_ASSOC);
         
+        $expected = array(
+            array("id" => 1, "name" => "Axl", "age" => 50),
+            array("id" => 3, "name" => "Duff", "age" => 52),
+            array("id" => 4, "name" => "Izzy", "age" => 53),
+            array("id" => 5, "name" => "Steven", "age" => 54)
+        );
+        $this->assertEquals($expected, $result, "Should delete one row");
     }
-    
+
+	public function testCantDeleteRowWithoutIdField()
+	{
+        $fields = array("name" => "Axl");
+        $this->expectException(\PdoException::class);
+        $this->table->deleteRow($fields);
+    }
+
 }

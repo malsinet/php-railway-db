@@ -1,7 +1,7 @@
 <?php
 
 /**
- * PdoTableUpdateRowTest class file
+ * FindRowByFieldsTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -13,16 +13,16 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\PdoTable;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database as DB;
 
 
 /**
- * PdoTableUpdateRowTest class
+ * FindRowByFieldsTest class
  *
- * Tests checking PdoTable updateRow
+ * Tests checking  findRowByFields
  *
  * @category   Tests
  * @package    Railway Database
@@ -32,7 +32,7 @@ use github\malsinet\Railway\Database as DB;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-class PdoTableUpdateRowTest extends TestCase
+class FindRowByFieldsTest extends TestCase
 {
 
     public function setUp()
@@ -53,12 +53,12 @@ class PdoTableUpdateRowTest extends TestCase
             new DB\TableQueries(
                 $insert=null, 
                 $select=null,
-                $find=null,
-                new DB\Queries\Update(
+                new DB\Queries\FindQuery(
                     new DB\Queries\Base(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )
                 ),
+                $update=null,
                 $delete=null
             ),
             new DB\RowToQuery()
@@ -77,44 +77,25 @@ class PdoTableUpdateRowTest extends TestCase
         $this->table->findRowByFields("this is a string");
     }
     
-	public function testUpdateRow()
+	public function testFindRowByOneField()
 	{
-        $fields   = array("id" => 2, "name" => "Slash Rocks!");
-        $this->table->updateRow($fields);
-
-        $query = "SELECT * FROM users";
-        $sth = $this->db->prepare($query);
-        $sth->execute();
-        $result = $sth->fetchAll(\PDO::FETCH_ASSOC);
-        
-        $expected = array(
-            array("id" => 1, "name" => "Axl", "age" => 50),
-            array("id" => 2, "name" => "Slash Rocks!", "age" => 51),
-            array("id" => 3, "name" => "Duff", "age" => 52),
-            array("id" => 4, "name" => "Izzy", "age" => 53),
-            array("id" => 5, "name" => "Steven", "age" => 54)
-        );
-        $this->assertEquals($expected, $result, "Should Update one row");
+        $expected = array("id" => 2, "name" => "Slash", "age" => 51);
+        $fields   = array("id" => 2);
+        $this->assertEquals($expected, $this->table->findRowByFields($fields), "Should Find one row");
     }
 
-	public function testCannotUpdateRowWithoutIdField()
+	public function testFindRowByTwoFields()
 	{
-        $fields   = array("name" => "Matt Sorum?");
-        $this->table->updateRow($fields);
-
-        $query = "SELECT * FROM users";
-        $sth = $this->db->prepare($query);
-        $sth->execute();
-        $result = $sth->fetchAll(\PDO::FETCH_ASSOC);
-        
-        $expected = array(
-            array("id" => 1, "name" => "Axl", "age" => 50),
-            array("id" => 2, "name" => "Slash", "age" => 51),
-            array("id" => 3, "name" => "Duff", "age" => 52),
-            array("id" => 4, "name" => "Izzy", "age" => 53),
-            array("id" => 5, "name" => "Steven", "age" => 54)
-        );
-        $this->assertEquals($expected, $result, "Should not update anything");
+        $expected = array("id" => 1, "name" => "Axl", "age" => 50);
+        $fields   = array("id" => 1, "name" => "Axl");
+        $this->assertEquals($expected, $this->table->findRowByFields($fields), "Should Find one row");
     }
 
+	public function testFindRowByFieldsNotFound()
+	{
+        $fields = array("id" => 1, "name" => "Lars");
+        $this->assertEquals(array(), $this->table->findRowByFields($fields), "Should not find an inexistent row");
+        
+    }
+    
 }
