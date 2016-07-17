@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SelectAllQueryTest class file
+ * SelectAllTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -13,7 +13,7 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\Queries;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database\RowToQuery;
@@ -21,7 +21,7 @@ use github\malsinet\Railway\Database\Queries;
 
 
 /**
- * SelectAllQueryTest class
+ * SelectAllTest class
  *
  * Tests checking that correct SELECT queries are returned
  *
@@ -33,12 +33,12 @@ use github\malsinet\Railway\Database\Queries;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-validations
  */
-class SelectAllQueryTest extends TestCase
+class SelectAllTest extends TestCase
 {
 
 	public function testEmptyTableThrowsException()
 	{
-        $select = new Queries\SelectAllQuery(
+        $select = new Queries\SelectAll(
             new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             )
@@ -49,14 +49,14 @@ class SelectAllQueryTest extends TestCase
     
 	public function testEmptyOriginThrowsException()
 	{
-        $select = new Queries\SelectAllQuery($origin=null);
+        $select = new Queries\SelectAll($origin=null);
         $this->expectException(Queries\QueryException::class);
         $select->query();
     }
     
-	public function testValidSelectAllQuery()
+	public function testValidSelectAll()
 	{
-        $select = new Queries\SelectAllQuery(
+        $select = new Queries\SelectAll(
             new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             )

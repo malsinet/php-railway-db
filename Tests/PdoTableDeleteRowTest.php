@@ -55,7 +55,7 @@ class PdoTableDeleteRowTest extends TestCase
                 $select=null,
                 $find=null,
                 $update=null,
-                new DB\Queries\DeleteQuery(
+                new DB\Queries\Delete(
                     new DB\Queries\Base(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SelectQueryTest class file
+ * UpdateTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -13,7 +13,7 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\Queries;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database\RowToQuery;
@@ -21,7 +21,7 @@ use github\malsinet\Railway\Database\Queries;
 
 
 /**
- * SelectQueryTest class
+ * UpdateTest class
  *
  * Tests checking that a correct ORDER BY clause is added
  *
@@ -33,47 +33,58 @@ use github\malsinet\Railway\Database\Queries;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-class SelectQueryTest extends TestCase
+class UpdateTest extends TestCase
 {
 
 	public function testEmptyOriginThrowsException()
 	{
-        $select = new Queries\SelectQuery($origin=null);
+        $update = new Queries\Update($origin=null);
         $this->expectException(Queries\QueryException::class);
-        $select->query(array());
+        $update->query(array());
     }
     
 	public function testEmptyTableThrowsException()
 	{
-        $select = new Queries\SelectQuery(
+        $update = new Queries\Update(
             new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             )
         );
         $this->expectException(Queries\QueryException::class);
-        $select->query(array());
+        $update->query(array());
+    }
+    
+	public function testEmptyPkThrowsException()
+	{
+        $update = new Queries\Update(
+            new Queries\Base(
+                $table="user", $pk="", new RowToQuery()
+            )
+        );
+        $this->expectException(Queries\QueryException::class);
+        $update->query(array());
     }
     
 	public function testEmptyRowThrowsException()
 	{
-        $select = new Queries\SelectQuery(
+        $update = new Queries\Update(
             new Queries\Base(
                 $table="user", $pk="id", $row=null
             ) 
         );
         $this->expectException(Queries\QueryException::class);
-        $select->query(array());
+        $update->query(array());
     }
     
-	public function testValidSelectQuery()
+	public function testValidUpdate()
 	{
-        $select = new Queries\SelectQuery(
+        $update = new Queries\Update(
             new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ) 
         );
         $row = array("name" => "Bob Marley", "age" => 27);
-        $this->assertEquals("SELECT * FROM user WHERE (name = :name) AND (age = :age)", $select->query($row), "SelectQuery must be valid");
+        $this->assertEquals("UPDATE user SET name = :name, age = :age WHERE (id = :id)", $update->query($row), "Update must be valid");
     }
 
 

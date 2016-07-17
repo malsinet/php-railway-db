@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DeleteQueryTest class file
+ * FindTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -13,7 +13,7 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\Queries;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database\RowToQuery;
@@ -21,9 +21,9 @@ use github\malsinet\Railway\Database\Queries;
 
 
 /**
- * DeleteQueryTest class
+ * FindTest class
  *
- * Tests checking that correct DELETE queries are returned
+ * Tests checking that correct SELECT queries are returned
  *
  * @category   Tests
  * @package    Railway Database
@@ -33,46 +33,46 @@ use github\malsinet\Railway\Database\Queries;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-validations
  */
-class DeleteQueryTest extends TestCase
+class FindTest extends TestCase
 {
 
 	public function testEmptyTableThrowsException()
 	{
-        $delete = new Queries\DeleteQuery(
+        $find = new Queries\Find(
             new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             )
         );
         $this->expectException(Queries\QueryException::class);
-        $delete->query();
+        $find->query($row=array());
     }
     
-	public function testEmptyPkThrowsException()
+	public function testEmptyRowThrowsException()
 	{
-        $delete = new Queries\DeleteQuery(
+        $find = new Queries\Find(
             new Queries\Base(
-                $table="user", $pk="", new RowToQuery()
+                $table="user", $pk="id", $row=null
             )
         );
         $this->expectException(Queries\QueryException::class);
-        $delete->query();
+        $find->query($row=array());
     }
     
 	public function testEmptyOriginThrowsException()
 	{
-        $delete = new Queries\DeleteQuery($origin=null);
+        $find = new Queries\Find($origin=null);
         $this->expectException(Queries\QueryException::class);
-        $delete->query();
+        $find->query($row=array());
     }
     
-	public function testValidDeleteQuery()
+	public function testValidFind()
 	{
-        $delete = new Queries\DeleteQuery(
+        $find = new Queries\Find(
             new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             )
         );
-        $this->assertEquals("DELETE FROM user WHERE id = :id", $delete->query(), "Delete query should be valid");
+        $this->assertEquals("SELECT * FROM user WHERE (id = :id)", $find->query(array("id" => 23)), "Find query should be valid");
     }
 
 }

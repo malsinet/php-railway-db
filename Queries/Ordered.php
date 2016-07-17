@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SelectAllQuery class file
+ * Ordered class file
  *
  * @category   Queries
  * @package    Railway Database
@@ -19,9 +19,9 @@ use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
- * SelectAllQuery class
+ * Ordered class
  *
- * SelectAllQuery class returns a "SELECT * FROM $table" query
+ * Returns an ORDER BY clause
  *
  * @category   Queries
  * @package    Railway Database
@@ -31,33 +31,42 @@ use github\malsinet\Railway\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class SelectAllQuery implements Query
+final class Ordered implements Query
 {
     private $origin;
 
+    private $field;
+
+    private $direction;
+    
     public $table;
 
     public $pk;
     
     public $row;
     
-    public function __construct($origin)
+    public function __construct($origin, $field, $direction)
     {
-        $this->origin = $origin;
-        $this->table  = $origin->table;
-        $this->pk     = $origin->pk; 
-        $this->row    = $origin->row;
+        $this->origin    = $origin;
+        $this->table     = $origin->table;
+        $this->pk        = $origin->pk;
+        $this->row       = $origin->row;
+        $this->field     = $field;
+        $this->direction = $direction;
     }
 
-    public function query($row=array())
+    public function query($row=null)
     {
         if (empty($this->origin)) {
             throw new QueryException("Origin query object cannot be empty");
         }
-        if (empty($this->table)) {
-            throw new QueryException("Table property cannot be empty");
+        if (empty($this->field)) {
+            throw new QueryException("OrderBy field property cannot be empty");
         }
-        return "SELECT * FROM {$this->table}";
+        if (empty($this->direction)) {
+            throw new QueryException("OrderBy direction property cannot be empty");
+        }
+        return $this->origin->query($row)." ORDER BY {$this->field} {$this->direction}";
     }
 
 }

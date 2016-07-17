@@ -1,7 +1,7 @@
 <?php
 
 /**
- * InsertQuery class file
+ * SoftDelete class file
  *
  * @category   Queries
  * @package    Railway Database
@@ -19,9 +19,10 @@ use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
- * InsertQuery class
+ * SoftDelete class
  *
- * Returns an INSERT query 
+ * Returns a soft delete query 
+ *   - UPDATE $table SET $field = 'DELETED' WHERE $pk = :$pk
  *
  * @category   Queries
  * @package    Railway Database
@@ -31,25 +32,31 @@ use github\malsinet\Railway\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class InsertQuery implements Query
+final class SoftDelete implements Query
 {
     private $origin;
 
+    private $field;
+
+    private $value;
+    
     public $table;
 
     public $pk;
     
     public $row;
     
-    public function __construct($origin)
+    public function __construct($origin, $field, $value)
     {
         $this->origin = $origin;
         $this->table  = $origin->table;
         $this->pk     = $origin->pk;
         $this->row    = $origin->row;
+        $this->field  = $field;
+        $this->value  = $value;
     }
 
-    public function query($row)
+    public function query($row=array())
     {
         if (empty($this->origin)) {
             throw new QueryException("Origin query object cannot be empty");
@@ -57,12 +64,16 @@ final class InsertQuery implements Query
         if (empty($this->table)) {
             throw new QueryException("Query table property cannot be empty");
         }
-        if (empty($this->row)) {
-            throw new QueryException("Query row property cannot be empty");
+        if (empty($this->pk)) {
+            throw new QueryException("Query pk property cannot be empty");
         }
-        $fields = $this->row->toFields($row);
-        $values = $this->row->toValues($row);
-        return "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
+        if (empty($this->field)) {
+            throw new QueryException("Query field property cannot be empty");
+        }
+        if (empty($this->value)) {
+            throw new QueryException("Query value property cannot be empty");
+        }
+        return "UPDATE {$this->table} SET {$this->field} = '{$this->value}' WHERE ({$this->pk} = :{$this->pk})";
     }
 
 }

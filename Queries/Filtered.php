@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FilteredQuery class file
+ * Filtered class file
  *
  * @category   Queries
  * @package    Railway Database
@@ -19,7 +19,7 @@ use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
- * FilteredQuery class
+ * Filtered class
  *
  * Returns a filtered query ("WHERE $field = '$value'")
  *
@@ -31,7 +31,7 @@ use github\malsinet\Railway\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class FilteredQuery implements Query
+final class Filtered implements Query
 {
     private $origin;
 

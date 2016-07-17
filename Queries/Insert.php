@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FindQuery class file
+ * Insert class file
  *
  * @category   Queries
  * @package    Railway Database
@@ -19,9 +19,9 @@ use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
- * FindQuery class
+ * Insert class
  *
- * Returns a SELECT query with WHERE predicates
+ * Returns an INSERT query 
  *
  * @category   Queries
  * @package    Railway Database
@@ -31,14 +31,14 @@ use github\malsinet\Railway\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class FindQuery implements Query
+final class Insert implements Query
 {
     private $origin;
 
     public $table;
 
     public $pk;
-
+    
     public $row;
     
     public function __construct($origin)
@@ -55,13 +55,14 @@ final class FindQuery implements Query
             throw new QueryException("Origin query object cannot be empty");
         }
         if (empty($this->table)) {
-            throw new QueryException("Exclusion field property cannot be empty");
+            throw new QueryException("Query table property cannot be empty");
         }
         if (empty($this->row)) {
-            throw new QueryException("Row object property cannot be empty");
+            throw new QueryException("Query row property cannot be empty");
         }
-        $predicates = $this->row->toPredicates($row);
-        return "SELECT * FROM {$this->table} WHERE {$predicates}";
+        $fields = $this->row->toFields($row);
+        $values = $this->row->toValues($row);
+        return "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * UpdateQuery class file
+ * Find class file
  *
  * @category   Queries
  * @package    Railway Database
@@ -19,10 +19,9 @@ use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
- * UpdateQuery class
+ * Find class
  *
- * Returns an UPDATE query 
- *   - UPDATE $table SET $fields WHERE $pk = :$pk
+ * Returns a SELECT query with WHERE predicates
  *
  * @category   Queries
  * @package    Railway Database
@@ -32,14 +31,14 @@ use github\malsinet\Railway\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class UpdateQuery implements Query
+final class Find implements Query
 {
     private $origin;
 
     public $table;
 
     public $pk;
-    
+
     public $row;
     
     public function __construct($origin)
@@ -56,16 +55,13 @@ final class UpdateQuery implements Query
             throw new QueryException("Origin query object cannot be empty");
         }
         if (empty($this->table)) {
-            throw new QueryException("Query table property cannot be empty");
-        }
-        if (empty($this->pk)) {
-            throw new QueryException("Query pk property cannot be empty");
+            throw new QueryException("Exclusion field property cannot be empty");
         }
         if (empty($this->row)) {
-            throw new QueryException("Query row property cannot be empty");
+            throw new QueryException("Row object property cannot be empty");
         }
-        $update = $this->row->toUpdate($row, $this->pk);
-        return  "UPDATE {$this->table} SET $update WHERE ({$this->pk} = :{$this->pk})";
+        $predicates = $this->row->toPredicates($row);
+        return "SELECT * FROM {$this->table} WHERE {$predicates}";
     }
 
 }

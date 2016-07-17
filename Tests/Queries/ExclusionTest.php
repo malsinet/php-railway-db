@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ExclusionQueryTest class file
+ * ExclusionTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -13,7 +13,7 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\Queries;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database\RowToQuery;
@@ -21,7 +21,7 @@ use github\malsinet\Railway\Database\Queries;
 
 
 /**
- * ExclusionQueryTest class
+ * ExclusionTest class
  *
  * Tests checking that correct excluision clauses get added
  *
@@ -33,12 +33,12 @@ use github\malsinet\Railway\Database\Queries;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-class ExclusionQueryTest extends TestCase
+class ExclusionTest extends TestCase
 {
 
 	public function testEmptyFieldThrowsException()
 	{
-        $exclusion = new Queries\ExclusionQuery(
+        $exclusion = new Queries\Exclusion(
             new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ),
@@ -51,7 +51,7 @@ class ExclusionQueryTest extends TestCase
     
 	public function testEmptyValueThrowsException()
 	{
-        $exclusion = new Queries\ExclusionQuery(
+        $exclusion = new Queries\Exclusion(
             new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ),
@@ -64,7 +64,7 @@ class ExclusionQueryTest extends TestCase
     
 	public function testEmptyOriginThrowsException()
 	{
-        $exclusion = new Queries\ExclusionQuery(
+        $exclusion = new Queries\Exclusion(
             null,
             $field="status",
             $value=""
@@ -73,9 +73,9 @@ class ExclusionQueryTest extends TestCase
         $exclusion->query();
     }
     
- 	public function testWhereExclusionQuery()
+ 	public function testWhereExclusion()
 	{
-        $exclusion = new Queries\ExclusionQuery(
+        $exclusion = new Queries\Exclusion(
             new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ),
@@ -85,10 +85,10 @@ class ExclusionQueryTest extends TestCase
         $this->assertEquals("WHERE (status <> 'DELETED')", $exclusion->query(), "Exclusion query should add a WHERE clause");
     }
 
- 	public function testAndExclusionQuery()
+ 	public function testAndExclusion()
 	{
-        $exclusion = new Queries\ExclusionQuery(
-            new Queries\FindQuery(
+        $exclusion = new Queries\Exclusion(
+            new Queries\Find(
                 new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SelectQuery class file
+ * Update class file
  *
  * @category   Queries
  * @package    Railway Database
@@ -19,10 +19,10 @@ use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
- * SelectQuery class
+ * Update class
  *
- * Returns a SELECT query 
- *   - SELECT * FROM $table WHERE $predicates
+ * Returns an UPDATE query 
+ *   - UPDATE $table SET $fields WHERE $pk = :$pk
  *
  * @category   Queries
  * @package    Railway Database
@@ -32,7 +32,7 @@ use github\malsinet\Railway\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class SelectQuery implements Query
+final class Update implements Query
 {
     private $origin;
 
@@ -46,7 +46,7 @@ final class SelectQuery implements Query
     {
         $this->origin = $origin;
         $this->table  = $origin->table;
-        $this->pk     = $origin->pk; 
+        $this->pk     = $origin->pk;
         $this->row    = $origin->row;
     }
 
@@ -58,11 +58,14 @@ final class SelectQuery implements Query
         if (empty($this->table)) {
             throw new QueryException("Query table property cannot be empty");
         }
+        if (empty($this->pk)) {
+            throw new QueryException("Query pk property cannot be empty");
+        }
         if (empty($this->row)) {
             throw new QueryException("Query row property cannot be empty");
         }
-        $predicates = $this->row->toPredicates($row);
-        return "SELECT * FROM {$this->table} WHERE {$predicates}";
+        $update = $this->row->toUpdate($row, $this->pk);
+        return  "UPDATE {$this->table} SET $update WHERE ({$this->pk} = :{$this->pk})";
     }
 
 }

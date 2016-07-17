@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SoftDeleteQueryTest class file
+ * SoftDeleteTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -13,7 +13,7 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\Queries;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database\RowToQuery;
@@ -21,7 +21,7 @@ use github\malsinet\Railway\Database\Queries;
 
 
 /**
- * SoftDeleteQueryTest class
+ * SoftDeleteTest class
  *
  * Tests checking that a correct ORDER BY clause is added
  *
@@ -33,12 +33,12 @@ use github\malsinet\Railway\Database\Queries;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-class SoftDeleteQueryTest extends TestCase
+class SoftDeleteTest extends TestCase
 {
 
 	public function testEmptyOriginThrowsException()
 	{
-        $delete = new Queries\SoftDeleteQuery(
+        $delete = new Queries\SoftDelete(
             $origin=null, $field="status", $value="DELETED"
         );
         $this->expectException(Queries\QueryException::class);
@@ -47,7 +47,7 @@ class SoftDeleteQueryTest extends TestCase
     
 	public function testEmptyTableThrowsException()
 	{
-        $delete = new Queries\SoftDeleteQuery(
+        $delete = new Queries\SoftDelete(
             new Queries\Base(
                 $table="", $pk="id", new RowToQuery()
             ), $field="status", $value="DELETED"
@@ -58,7 +58,7 @@ class SoftDeleteQueryTest extends TestCase
     
 	public function testEmptyPkThrowsException()
 	{
-        $delete = new Queries\SoftDeleteQuery(
+        $delete = new Queries\SoftDelete(
             new Queries\Base(
                 $table="user", $pk="", new RowToQuery()
             ), $field="status", $value="DELETED"
@@ -69,7 +69,7 @@ class SoftDeleteQueryTest extends TestCase
     
 	public function testEmptyFieldThrowsException()
 	{
-        $delete = new Queries\SoftDeleteQuery(
+        $delete = new Queries\SoftDelete(
             new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ), $field="", $value="DELETED"
@@ -80,7 +80,7 @@ class SoftDeleteQueryTest extends TestCase
     
 	public function testEmptyValueThrowsException()
 	{
-        $delete = new Queries\SoftDeleteQuery(
+        $delete = new Queries\SoftDelete(
             new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ), $field="status", $value=""
@@ -89,9 +89,9 @@ class SoftDeleteQueryTest extends TestCase
         $delete->query();
     }
     
-	public function testValidSoftDeleteQuery()
+	public function testValidSoftDelete()
 	{
-        $delete = new Queries\SoftDeleteQuery(
+        $delete = new Queries\SoftDelete(
             new Queries\Base(
                 $table="user", $pk="id", new RowToQuery()
             ), $field="status", $value="DELETED"

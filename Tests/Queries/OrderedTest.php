@@ -1,7 +1,7 @@
 <?php
 
 /**
- * OrderedQueryTest class file
+ * OrderedTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -13,7 +13,7 @@
  */
 
 
-namespace github\malsinet\Railway\Database\Tests;
+namespace github\malsinet\Railway\Database\Tests\Queries;
 
 use PHPUnit\Framework\TestCase;
 use github\malsinet\Railway\Database\RowToQuery;
@@ -21,7 +21,7 @@ use github\malsinet\Railway\Database\Queries;
 
 
 /**
- * OrderedQueryTest class
+ * OrderedTest class
  *
  * Tests checking that a correct ORDER BY clause is added
  *
@@ -33,20 +33,20 @@ use github\malsinet\Railway\Database\Queries;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-class OrderedQueryTest extends TestCase
+class OrderedTest extends TestCase
 {
 
 	public function testEmptyOriginThrowsException()
 	{
-        $select = new Queries\OrderedQuery($origin=null, $orderBy="date", $direction="DESC");
+        $select = new Queries\Ordered($origin=null, $orderBy="date", $direction="DESC");
         $this->expectException(Queries\QueryException::class);
         $select->query();
     }
     
 	public function testEmptyFieldThrowsException()
 	{
-        $ordered = new Queries\OrderedQuery(
-            new Queries\SelectAllQuery(
+        $ordered = new Queries\Ordered(
+            new Queries\SelectAll(
                 new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
@@ -58,8 +58,8 @@ class OrderedQueryTest extends TestCase
     
 	public function testEmptyDirectionThrowsException()
 	{
-        $ordered = new Queries\OrderedQuery(
-            new Queries\SelectAllQuery(
+        $ordered = new Queries\Ordered(
+            new Queries\SelectAll(
                 new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
@@ -69,10 +69,10 @@ class OrderedQueryTest extends TestCase
         $ordered->query();
     }
     
-	public function testValidOrderedQuery()
+	public function testValidOrdered()
 	{
-        $ordered = new Queries\OrderedQuery(
-            new Queries\SelectAllQuery(
+        $ordered = new Queries\Ordered(
+            new Queries\SelectAll(
                 new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
