@@ -15,7 +15,7 @@
 
 namespace github\malsinet\Railway\Database\Queries;
 
-use github\malsinet\Database\Contracts\Query;
+use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
@@ -31,7 +31,7 @@ use github\malsinet\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class OrderedQuery implements Query;
+final class OrderedQuery implements Query
 {
     private $origin;
 
@@ -47,16 +47,25 @@ final class OrderedQuery implements Query;
     
     public function __construct($origin, $field, $direction)
     {
-        $this->origin = $origin;
-        $this->table  = $origin->table;
-        $this->pk     = $origin->pk;
-        $this->row    = $origin->row;
-        $this->field  = $field;
-        $this->value  = $value;
+        $this->origin    = $origin;
+        $this->table     = $origin->table;
+        $this->pk        = $origin->pk;
+        $this->row       = $origin->row;
+        $this->field     = $field;
+        $this->direction = $direction;
     }
 
-    public function query($row)
+    public function query($row=null)
     {
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }
+        if (empty($this->field)) {
+            throw new QueryException("OrderBy field property cannot be empty");
+        }
+        if (empty($this->direction)) {
+            throw new QueryException("OrderBy direction property cannot be empty");
+        }
         return $this->origin->query($row)." ORDER BY {$this->field} {$this->direction}";
     }
 

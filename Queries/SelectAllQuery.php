@@ -55,7 +55,7 @@ final class SelectAllQuery implements Query
             throw new QueryException("Origin query object cannot be empty");
         }
         if (empty($this->table)) {
-            throw new QueryException("Table  property cannot be empty");
+            throw new QueryException("Table property cannot be empty");
         }
         return "SELECT * FROM {$this->table}";
     }
