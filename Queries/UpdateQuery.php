@@ -15,7 +15,7 @@
 
 namespace github\malsinet\Railway\Database\Queries;
 
-use github\malsinet\Database\Contracts\Query;
+use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
@@ -32,7 +32,7 @@ use github\malsinet\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class UpdateQuery implements Query;
+final class UpdateQuery implements Query
 {
     private $origin;
 
@@ -52,8 +52,20 @@ final class UpdateQuery implements Query;
 
     public function query($row)
     {
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }
+        if (empty($this->table)) {
+            throw new QueryException("Query table property cannot be empty");
+        }
+        if (empty($this->pk)) {
+            throw new QueryException("Query pk property cannot be empty");
+        }
+        if (empty($this->row)) {
+            throw new QueryException("Query row property cannot be empty");
+        }
         $update = $this->row->toUpdate($row, $this->pk);
-        return  "UPDATE {$this->table} SET $update WHERE {$this->pk} = :{$this->pk}";
+        return  "UPDATE {$this->table} SET $update WHERE ({$this->pk} = :{$this->pk})";
     }
 
 }
