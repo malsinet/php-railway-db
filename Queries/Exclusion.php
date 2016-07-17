@@ -68,9 +68,9 @@ final class Exclusion implements Query
         }
         $query = $this->origin->query($row);
         if (preg_match("/ WHERE /i", $query)) {
-            $query.= "AND ({$this->field} <> '{$this->value}')"; 
+            $query.= " AND ({$this->field} <> '{$this->value}')"; 
         } else {
-            $query.= "WHERE ({$this->field} <> '{$this->value}')"; 
+            $query.= " WHERE ({$this->field} <> '{$this->value}')"; 
         }
         return $query;
     }
