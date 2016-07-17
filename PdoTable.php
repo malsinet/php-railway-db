@@ -100,9 +100,9 @@ final class PdoTable implements Contracts\CRUD
         if (!is_array($fields)) {
             throw new DatabaseException("Fields parameter [$fields] must be an array");
         }
-        $query = $this->queries->deleteRow($row);
+        $query = $this->queries->deleteRow($fields);
         $stmt  = $this->db->prepare($query);
-        $binds = $this->row->toBinds($row);
+        $binds = $this->row->toBinds($fields);
         $stmt->execute($binds);
         return;
     }

@@ -54,12 +54,12 @@ class PdoTableDeleteRowTest extends TestCase
                 $insert=null, 
                 $select=null,
                 $find=null,
-                new DB\Queries\UpdateQuery(
+                $update=null,
+                new DB\Queries\DeleteQuery(
                     new DB\Queries\BaseQuery(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )
-                ),
-                $delete=null
+                )
             ),
             new DB\RowToQuery()
         );
@@ -98,22 +98,9 @@ class PdoTableDeleteRowTest extends TestCase
 
 	public function testCantDeleteRowWithoutIdField()
 	{
-        $fields   = array("name" => "Axl");
+        $fields = array("name" => "Axl");
+        $this->expectException(\PdoException::class);
         $this->table->deleteRow($fields);
-
-        $query = "SELECT * FROM users";
-        $sth = $this->db->prepare($query);
-        $sth->execute();
-        $result = $sth->fetchAll(\PDO::FETCH_ASSOC);
-        
-        $expected = array(
-            array("id" => 1, "name" => "Axl", "age" => 50),
-            array("id" => 2, "name" => "Slash", "age" => 51),
-            array("id" => 3, "name" => "Duff", "age" => 52),
-            array("id" => 4, "name" => "Izzy", "age" => 53),
-            array("id" => 5, "name" => "Steven", "age" => 54)
-        );
-        $this->assertEquals($expected, $result, "Should not delete anything");
     }
 
 }
