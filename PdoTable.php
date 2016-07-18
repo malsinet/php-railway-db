@@ -52,8 +52,8 @@ final class PdoTable implements Contracts\CRUD
         }
         $query = $this->queries->insertRow($fields);
         $stmt  = $this->db->prepare($query);
-        $binds = $this->row->toBinds($fields);
-        $stmt->execute($binds);
+        $binds = $this->row->toBinds($fields);        
+        $retcode = $stmt->execute($binds);
         return $this->db->lastInsertId();
     }
 
@@ -64,7 +64,8 @@ final class PdoTable implements Contracts\CRUD
         }
         $query = $this->queries->selectRows($fields);
         $stmt  = $this->db->prepare($query);
-        $stmt->execute();
+        $binds = $this->row->toBinds($fields);        
+        $stmt->execute($binds);
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             yield $row;
         }
