@@ -82,7 +82,7 @@ class FilteredTest extends TestCase
                 ) 
             ), $field="status", $value="ACTIVE"
         );
-        $this->assertStringEndsWith("WHERE (status = 'ACTIVE')", $filtered->query(), "Filtered query ends with WHERE clause");
+        $this->assertStringEndsWith(" WHERE (status = 'ACTIVE')", $filtered->query(), "Filtered query ends with WHERE clause");
     }
 
 	public function testValidAndFiltered()
@@ -96,7 +96,7 @@ class FilteredTest extends TestCase
                 ), $exclude="role", $value="ADMIN"
             ), $field="status", $value="ACTIVE"
         );
-        $this->assertStringEndsWith("WHERE (status = 'ACTIVE')", $filtered->query(), "Filtered query ends with AND clause");
+        $this->assertStringEndsWith(" AND (status = 'ACTIVE')", $filtered->query(), "Filtered query ends with AND clause");
     }
 
 }
