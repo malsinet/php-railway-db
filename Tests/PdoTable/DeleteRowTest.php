@@ -99,7 +99,7 @@ class DeleteRowTest extends TestCase
 	public function testCantDeleteRowWithoutIdField()
 	{
         $fields = array("name" => "Axl");
-        $this->expectException(\PdoException::class);
+        $this->expectException(DB\DatabaseException::class);
         $this->table->deleteRow($fields);
     }
 
