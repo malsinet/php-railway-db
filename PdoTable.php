@@ -50,11 +50,15 @@ final class PdoTable implements Contracts\CRUD
         if (!is_array($fields)) {
             throw new DatabaseException("Fields parameter [$fields] must be an array");
         }
-        $query = $this->queries->insertRow($fields);
-        $stmt  = $this->db->prepare($query);
-        $binds = $this->row->toBinds($fields);        
-        $retcode = $stmt->execute($binds);
-        return $this->db->lastInsertId();
+        try {
+            $query = $this->queries->insertRow($fields);
+            $stmt  = $this->db->prepare($query);
+            $binds = $this->row->toBinds($fields);
+            $retcode = $stmt->execute($binds);
+            return $this->db->lastInsertId();
+        } catch (\PDOException $ex) {
+            throw new DatabaseException($ex->getMessage(), 0, $ex);
+        }
     }
 
     public function selectRows($fields=array())
@@ -62,12 +66,16 @@ final class PdoTable implements Contracts\CRUD
         if (!is_array($fields)) {
             throw new DatabaseException("Fields parameter [$fields] must be an array");
         }
-        $query = $this->queries->selectRows($fields);
-        $stmt  = $this->db->prepare($query);
-        $binds = $this->row->toBinds($fields);        
-        $stmt->execute($binds);
-        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            yield $row;
+        try {
+            $query = $this->queries->selectRows($fields);
+            $stmt  = $this->db->prepare($query);
+            $binds = $this->row->toBinds($fields);        
+            $stmt->execute($binds);
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                yield $row;
+            }
+        } catch (\PDOException $ex) {
+            throw new DatabaseException($ex->getMessage(), 0, $ex);
         }
     }
 
@@ -76,12 +84,16 @@ final class PdoTable implements Contracts\CRUD
         if (!is_array($fields)) {
             throw new DatabaseException("Fields parameter [$fields] must be an array");
         }
-        $query = $this->queries->findRowByFields($fields);
-        $stmt  = $this->db->prepare($query);
-        $binds = $this->row->toBinds($fields);
-        $stmt->execute($binds);
-        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return $row;
+        try {
+            $query = $this->queries->findRowByFields($fields);
+            $stmt  = $this->db->prepare($query);
+            $binds = $this->row->toBinds($fields);
+            $stmt->execute($binds);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return $row;
+        } catch (\PDOException $ex) {
+            throw new DatabaseException($ex->getMessage(), 0, $ex);
+        }
     }
 
     public function updateRow($fields)
@@ -89,11 +101,15 @@ final class PdoTable implements Contracts\CRUD
         if (!is_array($fields)) {
             throw new DatabaseException("Fields parameter [$fields] must be an array");
         }
-        $query = $this->queries->updateRow($fields);
-        $stmt  = $this->db->prepare($query);
-        $binds = $this->row->toBinds($fields);
-        $stmt->execute($binds);
-        return;
+        try {
+            $query = $this->queries->updateRow($fields);
+            $stmt  = $this->db->prepare($query);
+            $binds = $this->row->toBinds($fields);
+            $stmt->execute($binds);
+            return;
+        } catch (\PDOException $ex) {
+            throw new DatabaseException($ex->getMessage(), 0, $ex);
+        }
     }
 
     public function deleteRow($fields)
@@ -101,11 +117,15 @@ final class PdoTable implements Contracts\CRUD
         if (!is_array($fields)) {
             throw new DatabaseException("Fields parameter [$fields] must be an array");
         }
-        $query = $this->queries->deleteRow($fields);
-        $stmt  = $this->db->prepare($query);
-        $binds = $this->row->toBinds($fields);
-        $stmt->execute($binds);
-        return;
+        try {
+            $query = $this->queries->deleteRow($fields);        
+            $stmt  = $this->db->prepare($query);
+            $binds = $this->row->toBinds($fields);
+            $stmt->execute($binds);
+            return;
+        } catch (\PDOException $ex) {
+            throw new DatabaseException($ex->getMessage(), 0, $ex);
+        }
     }
 
 }
