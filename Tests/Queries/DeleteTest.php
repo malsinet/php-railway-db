@@ -72,7 +72,7 @@ class DeleteTest extends TestCase
                 $table="user", $pk="id", new RowToQuery()
             )
         );
-        $this->assertEquals("DELETE FROM user WHERE id = :id", $delete->query(), "Delete query should be valid");
+        $this->assertEquals("DELETE FROM user WHERE (id = :id)", $delete->query(), "Delete query should be valid");
     }
 
 }

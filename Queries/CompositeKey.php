@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Delete class file
+ * CompositeQuery class file
  *
  * @category   Queries
  * @package    Railway Database
@@ -19,10 +19,10 @@ use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
- * Delete class
+ * CompositeKey class
  *
- * Returns a delete query 
- *    - DELETE $table WHERE $pk = :$pk
+ * Returns a query decorated with a WHERE clause for composite keys 
+ *    - WHERE ($pk_1 = :$pk_1) AND ($pk_2 = :$pk2)
  *
  * @category   Queries
  * @package    Railway Database
@@ -32,7 +32,7 @@ use github\malsinet\Railway\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class Delete implements Query
+final class CompositeKey implements Query
 {
     private $origin;
 
@@ -52,16 +52,27 @@ final class Delete implements Query
 
     public function query($row=array())
     {
-        if (empty($this->table)) {
-            throw new QueryException("Table name property cannot be empty");
-        }
         if (empty($this->pk)) {
             throw new QueryException("Primary key property cannot be empty");
         }
+        if (!is_array($this->pk)) {
+            throw new QueryException("Primary key must be an array for composite queries");
+        }
         if (empty($this->origin)) {
             throw new QueryException("Origin query object cannot be empty");
+        }        
+        $clause = "";
+        foreach ($this->pk as $field) {
+            $clause .= " ({$field} = :$field) AND";
         }
-        return  "DELETE FROM {$this->table} WHERE ({$this->pk} = :{$this->pk})";
+        $clause = preg_replace("/ AND$/", "", $clause);
+        $clause = " WHERE".$clause;
+        $query = str_replace(
+            'WHERE (Array = :Array)',
+            $clause,
+            $this->origin->query($row)
+        );
+        return $query;
     }
 
 }
