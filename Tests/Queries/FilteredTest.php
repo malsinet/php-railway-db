@@ -39,9 +39,9 @@ class FilteredTest extends TestCase
 	public function testEmptyOriginThrowsException()
 	{
         $filtered = new Queries\Filtered(
-            new Queries\SelectAll(
-                $origin=null
-            ), $field="status", $value="ACTIVE"
+            $origin=null,
+            $field="status",
+            $value="ACTIVE"
         );
         $this->expectException(Queries\QueryException::class);
         $filtered->query();

@@ -52,14 +52,14 @@ final class Delete implements Query
 
     public function query($row=array())
     {
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }
         if (empty($this->table)) {
             throw new QueryException("Table name property cannot be empty");
         }
         if (empty($this->pk)) {
             throw new QueryException("Primary key property cannot be empty");
-        }
-        if (empty($this->origin)) {
-            throw new QueryException("Origin query object cannot be empty");
         }
         return  "DELETE FROM {$this->table} WHERE ({$this->pk} = :{$this->pk})";
     }

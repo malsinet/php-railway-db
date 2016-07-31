@@ -52,6 +52,9 @@ final class CompositeKey implements Query
 
     public function query($row=array())
     {
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }        
         if (empty($this->pk)) {
             throw new QueryException("Primary key property cannot be empty");
         }
@@ -60,9 +63,6 @@ final class CompositeKey implements Query
                 "Primary key must be an array for composite queries"
             );
         }
-        if (empty($this->origin)) {
-            throw new QueryException("Origin query object cannot be empty");
-        }        
         $clause = "";
         foreach ($this->pk as $field) {
             $clause .= " ({$field} = :$field) AND";

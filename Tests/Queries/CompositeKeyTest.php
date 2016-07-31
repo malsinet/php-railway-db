@@ -54,6 +54,17 @@ class CompositeKeyTest extends TestCase
         $select->query(array());
     }
     
+	public function testNotArrayPkThrowsException()
+	{
+        $select = new Queries\CompositeKey(
+            new Queries\Base(
+                $table="user", $pk="this is not an array", new RowToQuery()
+            )
+        );
+        $this->expectException(Queries\QueryException::class);
+        $select->query(array());
+    }
+    
 	public function testAddWhereClause()
 	{
         $update = new Queries\CompositeKey(
@@ -84,10 +95,8 @@ class CompositeKeyTest extends TestCase
                         $pk=array("company_id", "user_id"),
                         new RowToQuery()
                     )
-            )
-                ),
-                $field="status",
-                $value="DELETED"
+                )
+            ), $field="status", $value="DELETED"
         );        
         $row = array("name" => "Bob Marley", "age" => 27);
         $this->assertEquals(

@@ -57,14 +57,14 @@ final class Exclusion implements Query
 
     public function query($row=array())
     {
+        if (empty($this->origin)) {
+            throw new QueryException("Origin query object cannot be empty");
+        }
         if (empty($this->field)) {
             throw new QueryException("Exclusion field property cannot be empty");
         }
         if (empty($this->value)) {
             throw new QueryException("Exclusion value property cannot be empty");
-        }
-        if (empty($this->origin)) {
-            throw new QueryException("Origin query object cannot be empty");
         }
         $query = $this->origin->query($row);
         if (preg_match("/ WHERE /i", $query)) {
