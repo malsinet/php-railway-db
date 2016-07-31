@@ -74,7 +74,13 @@ class DeleteRowTest extends TestCase
 	public function testEmptyFieldsParameterThrowsException()
 	{
         $this->expectException(DB\DatabaseException::class);
-        $this->table->findRowByFields("this is a string");
+        $this->table->deleteRow($fields=null);
+    }
+    
+	public function testNotArrayFieldsParameterThrowsException()
+	{
+        $this->expectException(DB\DatabaseException::class);
+        $this->table->deleteRow($fields="this is not an array");
     }
     
 	public function testDeleteRow()

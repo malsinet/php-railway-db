@@ -53,7 +53,7 @@ class FindRowByFieldsTest extends TestCase
             new DB\TableQueries(
                 $insert=null, 
                 $select=null,
-                new DB\Queries\FindQuery(
+                new DB\Queries\Find(
                     new DB\Queries\Base(
                         $table="users", $pk="id", new DB\RowToQuery()
                     )
@@ -74,27 +74,45 @@ class FindRowByFieldsTest extends TestCase
 	public function testEmptyFieldsParameterThrowsException()
 	{
         $this->expectException(DB\DatabaseException::class);
-        $this->table->findRowByFields("this is a string");
+        $this->table->findRowByFields($fields=null);
+    }
+    
+	public function testNotArrayFieldsParameterThrowsException()
+	{
+        $this->expectException(DB\DatabaseException::class);
+        $this->table->findRowByFields(555);
     }
     
 	public function testFindRowByOneField()
 	{
         $expected = array("id" => 2, "name" => "Slash", "age" => 51);
         $fields   = array("id" => 2);
-        $this->assertEquals($expected, $this->table->findRowByFields($fields), "Should Find one row");
+        $this->assertEquals(
+            $expected,
+            $this->table->findRowByFields($fields),
+            "Should Find one row"
+        );
     }
 
 	public function testFindRowByTwoFields()
 	{
         $expected = array("id" => 1, "name" => "Axl", "age" => 50);
         $fields   = array("id" => 1, "name" => "Axl");
-        $this->assertEquals($expected, $this->table->findRowByFields($fields), "Should Find one row");
+        $this->assertEquals(
+            $expected,
+            $this->table->findRowByFields($fields),
+            "Should Find one row"
+        );
     }
 
 	public function testFindRowByFieldsNotFound()
 	{
         $fields = array("id" => 1, "name" => "Lars");
-        $this->assertEquals(array(), $this->table->findRowByFields($fields), "Should not find an inexistent row");
+        $this->assertEquals(
+            false,
+            $this->table->findRowByFields($fields),
+            "Should not find an inexistent row"
+        );
         
     }
     
