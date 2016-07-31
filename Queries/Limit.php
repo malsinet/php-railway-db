@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CompositeQuery class file
+ * Limit class file
  *
  * @category   Queries
  * @package    Railway Database
@@ -19,10 +19,9 @@ use github\malsinet\Railway\Database\Contracts\Query;
 
 
 /**
- * CompositeKey class
+ * Limit class
  *
- * Returns a query decorated with a WHERE clause for composite keys 
- *    - WHERE ($pk_1 = :$pk_1) AND ($pk_2 = :$pk2)
+ * Returns an ORDER BY clause
  *
  * @category   Queries
  * @package    Railway Database
@@ -32,49 +31,43 @@ use github\malsinet\Railway\Database\Contracts\Query;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-final class CompositeKey implements Query
+final class Limit implements Query
 {
     private $origin;
 
+    private $limit;
+
+    private $offset;
+    
     public $table;
 
     public $pk;
     
     public $row;
     
-    public function __construct($origin)
+    public function __construct($origin, $limit, $offset)
     {
         $this->origin = $origin;
         $this->table  = $origin->table;
         $this->pk     = $origin->pk;
         $this->row    = $origin->row;
+        $this->limit  = $limit;
+        $this->offset = $offset;
     }
 
-    public function query($row=array())
+    public function query($row=null)
     {
-        if (empty($this->pk)) {
-            throw new QueryException("Primary key property cannot be empty");
-        }
-        if (!is_array($this->pk)) {
-            throw new QueryException(
-                "Primary key must be an array for composite queries"
-            );
-        }
         if (empty($this->origin)) {
             throw new QueryException("Origin query object cannot be empty");
-        }        
-        $clause = "";
-        foreach ($this->pk as $field) {
-            $clause .= " ({$field} = :$field) AND";
         }
-        $clause = preg_replace("/ AND$/", "", $clause);
-        $clause = " WHERE".$clause;
-        $query = str_replace(
-            'WHERE (Array = :Array)',
-            $clause,
-            $this->origin->query($row)
-        );
-        return $query;
+        if (empty($this->limit)) {
+            throw new QueryException("Limit parameter cannot be empty");
+        }
+        if (empty($this->offset)) {
+            throw new QueryException("Offset parameter cannot be empty");
+        }
+        return $this->origin->query($row).
+               " LIMIT {$this->limit} OFFSET {$this->offset}";
     }
 
 }

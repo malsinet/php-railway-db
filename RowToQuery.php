@@ -45,7 +45,13 @@ final class RowToQuery implements Contracts\Row
         if (!is_array($row)) {
             throw new DatabaseException("Row [$row] must be an array");
         }
-        return implode(",", array_map(function($s){return ":".$s;}, array_keys($row)));
+        return implode(
+            ",",
+            array_map(
+                function($s){return ":".$s;},
+                array_keys($row)
+            )
+        );
     }
 
     public function toPredicates($row)

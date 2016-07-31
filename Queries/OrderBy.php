@@ -64,9 +64,12 @@ final class OrderBy implements Query
             throw new QueryException("OrderBy field property cannot be empty");
         }
         if (empty($this->direction)) {
-            throw new QueryException("OrderBy direction property cannot be empty");
+            throw new QueryException(
+                "OrderBy direction property cannot be empty"
+            );
         }
-        return $this->origin->query($row)." ORDER BY {$this->field} {$this->direction}";
+        return $this->origin->query($row).
+               " ORDER BY {$this->field} {$this->direction}";
     }
 
 }

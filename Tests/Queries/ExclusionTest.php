@@ -82,7 +82,11 @@ class ExclusionTest extends TestCase
             $field="status",
             $value="DELETED"
         );
-        $this->assertEquals(" WHERE (status <> 'DELETED')", $exclusion->query(), "Exclusion query should add a WHERE clause");
+        $this->assertEquals(
+            " WHERE (status <> 'DELETED')",
+            $exclusion->query(),
+            "Exclusion query should add a WHERE clause"
+        );
     }
 
  	public function testAndExclusion()
@@ -94,7 +98,11 @@ class ExclusionTest extends TestCase
                 )
             ), $field="status", $value="DELETED"
         );
-        $this->assertStringEndsWith(" AND (status <> 'DELETED')", $exclusion->query(), "Exclusion query should add an AND clause");
+        $this->assertStringEndsWith(
+            " AND (status <> 'DELETED')",
+            $exclusion->query(),
+            "Exclusion query should add an AND clause"
+        );
     }
     
 }
