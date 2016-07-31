@@ -1,7 +1,7 @@
 <?php
 
 /**
- * OrderedTest class file
+ * OrderByTest class file
  *
  * @category   Tests
  * @package    Railway Database
@@ -21,7 +21,7 @@ use github\malsinet\Railway\Database\Queries;
 
 
 /**
- * OrderedTest class
+ * OrderByTest class
  *
  * Tests checking that a correct ORDER BY clause is added
  *
@@ -33,19 +33,23 @@ use github\malsinet\Railway\Database\Queries;
  * @version    Release: 0.1.0
  * @link       http://github.com/malsinet/railway-database
  */
-class OrderedTest extends TestCase
+class OrderByTest extends TestCase
 {
 
 	public function testEmptyOriginThrowsException()
 	{
-        $select = new Queries\Ordered($origin=null, $orderBy="date", $direction="DESC");
+        $select = new Queries\OrderBy(
+            $origin=null,
+            $orderBy="date",
+            $direction="DESC"
+        );
         $this->expectException(Queries\QueryException::class);
         $select->query();
     }
     
 	public function testEmptyFieldThrowsException()
 	{
-        $ordered = new Queries\Ordered(
+        $ordered = new Queries\OrderBy(
             new Queries\SelectAll(
                 new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
@@ -58,7 +62,7 @@ class OrderedTest extends TestCase
     
 	public function testEmptyDirectionThrowsException()
 	{
-        $ordered = new Queries\Ordered(
+        $ordered = new Queries\OrderBy(
             new Queries\SelectAll(
                 new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
@@ -69,16 +73,20 @@ class OrderedTest extends TestCase
         $ordered->query();
     }
     
-	public function testValidOrdered()
+	public function testValidOrderBy()
 	{
-        $ordered = new Queries\Ordered(
+        $ordered = new Queries\OrderBy(
             new Queries\SelectAll(
                 new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
             ), $orderBy="date", $direction="DESC"
         );
-        $this->assertStringEndsWith("ORDER BY date DESC", $ordered->query(), "Ordered query should end with a valid ORDER BY clause");
+        $this->assertStringEndsWith(
+            "ORDER BY date DESC",
+            $ordered->query(),
+            "OrderBy query should end with a valid ORDER BY clause"
+        );
     }
 
 }
