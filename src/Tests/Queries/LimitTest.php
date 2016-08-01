@@ -38,53 +38,23 @@ class LimitTest extends TestCase
 
 	public function testEmptyOriginThrowsException()
 	{
-        $select = new Queries\Limit(
-            $origin=null,
-            $limit="20",
-            $offset="5"
-        );
+        $select = new Queries\Limit($origin=null);
         $this->expectException(Queries\QueryException::class);
         $select->query();
     }
     
-	public function testEmptyLimitThrowsException()
-	{
-        $ordered = new Queries\Limit(
-            new Queries\SelectAll(
-                new Queries\Base(
-                    $table="user", $pk="id", new RowToQuery()
-                )
-            ), $limit="", $offset="5"
-        );
-        $this->expectException(Queries\QueryException::class);
-        $ordered->query();
-    }
-    
-	public function testEmptyOffsetThrowsException()
-	{
-        $ordered = new Queries\Limit(
-            new Queries\SelectAll(
-                new Queries\Base(
-                    $table="user", $pk="id", new RowToQuery()
-                )
-            ), $limit="20", $offset=""
-        );
-        $this->expectException(Queries\QueryException::class);
-        $ordered->query();
-    }
-    
 	public function testValidLimit()
 	{
-        $ordered = new Queries\Limit(
+        $paged = new Queries\Limit(
             new Queries\SelectAll(
                 new Queries\Base(
                     $table="user", $pk="id", new RowToQuery()
                 )
-            ), $limit="20", $offset="5"
+            )
         );
         $this->assertStringEndsWith(
-            "LIMIT 20 OFFSET 5",
-            $ordered->query(),
+            "LIMIT :limit OFFSET :offset",
+            $paged->query(),
             "Limit query should end with a valid LIMIT clause"
         );
     }
