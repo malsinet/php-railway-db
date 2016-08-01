@@ -1,0 +1,23 @@
+<phpunit colors="true" strict="true" bootstrap="../vendor/autoload.php">
+
+  <testsuites>
+
+    <testsuite name="railway-database">
+      <directory>../src/Tests</directory>
+    </testsuite>
+
+  </testsuites>
+
+  <filter>
+    <whitelist>
+      <directory>../src</directory>
+      <exclude>
+        <directory>../src/Tests</directory>
+      </exclude>
+    </whitelist>
+  </filter>
+
+  <logging>
+    <log type="coverage-html" target="./coverage"/>
+  </logging>
+</phpunit>

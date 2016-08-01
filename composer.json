@@ -1,0 +1,10 @@
+{
+    "name": "malsinet/php-railway-db",
+    "description": "Railway Database Library for PHP",
+    "require-dev": {
+        "phpunit/phpunit": "5.4.*"
+    },
+    "autoload": {
+    	"psr-4": {"github\\malsinet\\Railway\\Database\\" : "src/"}
+    } 
+}

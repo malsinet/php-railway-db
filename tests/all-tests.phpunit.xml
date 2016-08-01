@@ -1,0 +1,9 @@
+<phpunit strict="true" bootstrap="../vendor/autoload.php">
+  <testsuites>
+
+    <testsuite name="railway-database">
+      <directory>../src/Tests</directory>
+    </testsuite>
+
+  </testsuites>
+</phpunit>
