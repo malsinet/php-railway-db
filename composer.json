@@ -1,6 +1,13 @@
 {
     "name": "malsinet/php-railway-db",
     "description": "Railway Database Library for PHP",
+    "authors": [
+        {
+            "name": "Martín Alsinet",
+            "email": "martin@alsinet.com.ar"
+        }
+    ],
+    "license": "MIT",
     "require-dev": {
         "phpunit/phpunit": "5.4.*"
     },
