@@ -31,13 +31,34 @@ namespace github\malsinet\Railway\Database;
  */
 final class PdoTable implements Contracts\CRUD
 {
-
+    /**
+     * PDO database object
+     *
+     * @var \PDO
+     */
     private $db;
 
+    /**
+     * TableQueries object
+     *
+     * @var TableQueries
+     */
     private $queries;
 
+    /**
+     * RowToQuery object
+     *
+     * @var RowToQuery
+     */
     private $row;
     
+    /**
+     * Class constructor
+     *
+     * @param \PDO         $db      Database link
+     * @param TableQueries $queries CRUD table queries
+     * @param RowToQuery   $row     RowToQuery object
+     */
     public function __construct(\PDO $db, Contracts\CRUD $queries, Contracts\Row $row)
     {
         $this->db      = $db;
@@ -45,10 +66,19 @@ final class PdoTable implements Contracts\CRUD
         $this->row     = $row;
     }
 
+    /**
+     * Insert a row
+     * Returns the record inserted id
+     *
+     * @param array $fields Row fields
+     * @return int
+     */
     public function insertRow($fields)
     {
         if (!is_array($fields)) {
-            throw new DatabaseException("Fields parameter [$fields] must be an array");
+            throw new DatabaseException(
+                "Fields parameter [$fields] must be an array"
+            );
         }
         try {
             $query = $this->queries->insertRow($fields);
@@ -61,10 +91,18 @@ final class PdoTable implements Contracts\CRUD
         }
     }
 
+    /**
+     * Select rows matching fields/values
+     *
+     * @param array $fields Fields array
+     * @return array
+     */
     public function selectRows($fields=array())
     {
         if (!is_array($fields)) {
-            throw new DatabaseException("Fields parameter [$fields] must be an array");
+            throw new DatabaseException(
+                "Fields parameter [$fields] must be an array"
+            );
         }
         try {
             $query = $this->queries->selectRows($fields);
@@ -86,7 +124,7 @@ final class PdoTable implements Contracts\CRUD
                 }
             }
             $binds = !empty($binds) ? $binds : null;
-            $stmt->execute($binds);
+             $stmt->execute($binds);
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 yield $row;
             }
@@ -95,10 +133,18 @@ final class PdoTable implements Contracts\CRUD
         }
     }
 
+    /**
+     * Find one row matching fields/values
+     *
+     * @param array $fields Fields array
+     * @return array
+     */
     public function findRowByFields($fields)
     {
         if (!is_array($fields)) {
-            throw new DatabaseException("Fields parameter [$fields] must be an array");
+            throw new DatabaseException(
+                "Fields parameter [$fields] must be an array"
+            );
         }
         try {
             $query = $this->queries->findRowByFields($fields);
@@ -112,10 +158,17 @@ final class PdoTable implements Contracts\CRUD
         }
     }
 
+    /**
+     * Update one row
+     *
+     * @param array $fields Updated fields
+     */
     public function updateRow($fields)
     {
         if (!is_array($fields)) {
-            throw new DatabaseException("Fields parameter [$fields] must be an array");
+            throw new DatabaseException(
+                "Fields parameter [$fields] must be an array"
+            );
         }
         try {
             $query = $this->queries->updateRow($fields);
@@ -128,10 +181,17 @@ final class PdoTable implements Contracts\CRUD
         }
     }
 
+    /**
+     * Delete one row
+     *
+     * @param array $fields Updated fields
+     */
     public function deleteRow($fields)
     {
         if (!is_array($fields)) {
-            throw new DatabaseException("Fields parameter [$fields] must be an array");
+            throw new DatabaseException(
+                "Fields parameter [$fields] must be an array"
+            );
         }
         try {
             $query = $this->queries->deleteRow($fields);        
