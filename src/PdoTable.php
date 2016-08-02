@@ -69,7 +69,23 @@ final class PdoTable implements Contracts\CRUD
         try {
             $query = $this->queries->selectRows($fields);
             $stmt  = $this->db->prepare($query);
-            $binds = $this->row->toBinds($fields);        
+            $binds = $this->row->toBinds($fields);
+            // limit & offset parameters must be bound as INT
+            foreach ($binds as $bind => $value) {
+                if ($bind == ":limit") {
+                    $stmt->bindParam(
+                        $bind, $value, \PDO::PARAM_INT
+                    );
+                    unset($binds[$bind]);
+                }
+                if ($bind == ":offset") {
+                    $stmt->bindParam(
+                        $bind, $value, \PDO::PARAM_INT
+                    );
+                    unset($binds[$bind]);
+                }
+            }
+            $binds = !empty($binds) ? $binds : null;
             $stmt->execute($binds);
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 yield $row;
