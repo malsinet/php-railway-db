@@ -5,7 +5,7 @@
  *
  * @category   Tests
  * @package    Railway Database
- * @author     Martin Alsinet <martin@alsinet.com.ar>
+ * @author     Martin Alsinet <martin@alsinet>
  * @copyright  2016 @MartinAlsinet
  * @license    MIT License
  * @version    Release: 0.1.0
@@ -27,7 +27,7 @@ use github\malsinet\Railway\Database\DatabaseException;
  *
  * @category   Tests
  * @package    Railway Database
- * @author     Martin Alsinet <martin@alsinet.com.ar>
+ * @author     Martin Alsinet <martin@alsinet>
  * @copyright  2016 @MartinAlsinet
  * @license    MIT License
  * @version    Release: 0.1.0
