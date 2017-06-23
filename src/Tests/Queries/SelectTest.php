@@ -73,7 +73,10 @@ class SelectTest extends TestCase
             ) 
         );
         $row = array("name" => "Bob Marley", "age" => 27);
-        $this->assertEquals("SELECT * FROM user WHERE (name = :name) AND (age = :age)", $select->query($row), "Select must be valid");
+        $this->assertEquals(
+            "SELECT * FROM user WHERE (name = :name) AND (age = :age)",
+            $select->query($row), "Select must be valid"
+        );
     }
 
 

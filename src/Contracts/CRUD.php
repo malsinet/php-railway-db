@@ -35,6 +35,8 @@ interface CRUD
 
     public function selectRows($conditions);
 
+    public function selectCount($conditions);
+
     public function findRowByFields($matches);
 
     public function updateRow($row);

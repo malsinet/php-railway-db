@@ -95,7 +95,7 @@ final class PdoTable implements Contracts\CRUD
      * Select rows matching fields/values
      *
      * @param array $fields Fields array
-     * @return array
+     * @return generator
      */
     public function selectRows($fields=array())
     {
@@ -108,23 +108,8 @@ final class PdoTable implements Contracts\CRUD
             $query = $this->queries->selectRows($fields);
             $stmt  = $this->db->prepare($query);
             $binds = $this->row->toBinds($fields);
-            // limit & offset parameters must be bound as INT
-            foreach ($binds as $bind => $value) {
-                if ($bind == ":limit") {
-                    $stmt->bindParam(
-                        $bind, $value, \PDO::PARAM_INT
-                    );
-                    unset($binds[$bind]);
-                }
-                if ($bind == ":offset") {
-                    $stmt->bindParam(
-                        $bind, $value, \PDO::PARAM_INT
-                    );
-                    unset($binds[$bind]);
-                }
-            }
             $binds = !empty($binds) ? $binds : null;
-             $stmt->execute($binds);
+            $stmt->execute($binds);
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 yield $row;
             }
@@ -133,6 +118,98 @@ final class PdoTable implements Contracts\CRUD
         }
     }
 
+    /**
+     * Select one page of rows matching fields/values
+     *
+     * @param integer $page        Page number
+     * @param integer $rowsPerPage Page size
+     * @param array   $fields      Fields array
+     * @return array
+     */
+    public function selectPage($page, $rowsPerPage, $fields=array())
+    {
+        if (!is_array($fields)) {
+            throw new DatabaseException(
+                "Fields parameter [$fields] must be an array"
+            );
+        }
+        try {
+            $limit  = intval($rowsPerPage);
+            $offset = intval(($page - 1) * $rowsPerPage);
+            $subqry = $this->queries->selectRows($fields);
+            $query  = "SELECT * FROM ($subqry) as t LIMIT $limit OFFSET $offset";
+            $stmt   = $this->db->prepare($query);
+            $binds  = $this->row->toBinds($fields);
+            $binds  = !empty($binds) ? $binds : null;
+            $stmt->execute($binds);
+            $rows   = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $rowcount = $this->selectCount($fields);
+            $page     = $this->pagination($page, $rowsPerPage, $rowcount);
+            $page["rows"] = $rows;
+            return $page;
+        } catch (\PDOException $ex) {
+            throw new DatabaseException($ex->getMessage(), 0, $ex);
+        }
+    }
+
+    /**
+     * Select Count of rows matching fields/values
+     *
+     * @param array $fields Fields array
+     * @return array
+     */
+    public function selectCount($fields=array())
+    {
+        if (!is_array($fields)) {
+            throw new DatabaseException(
+                "Fields parameter [$fields] must be an array"
+            );
+        }
+        try {
+            $query = $this->queries->selectCount($fields);
+            $stmt  = $this->db->prepare($query);
+            $binds = $this->row->toBinds($fields);
+            $binds = !empty($binds) ? $binds : null;
+            $stmt->execute($binds);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return intval($row["rowcount"]);
+        } catch (\PDOException $ex) {
+            throw new DatabaseException($ex->getMessage(), 0, $ex);
+        }
+    }
+
+    /**
+     * Perform pagination calculations
+     *
+     * @param integer $page        Current page
+     * @param integer $rowsPerPage Rows per page
+     * @return array
+     */
+    public function pagination($page, $rowsPerPage, $totalRows)
+    {
+        $totalPages = intval(ceil($totalRows/$rowsPerPage));
+        $page       = ($page>$totalPages) ? $totalPages : $page;
+        $page       = ($page<1) ? 1 : $page;
+        $nextPage   = ($page+1>$totalPages) ? $totalPages : $page+1;
+        $prevPage   = ($page-1<1) ? 1 : $page-1;
+        $firstRow   = $rowsPerPage * ($page-1) + 1;
+        $lastRow    = ($page == $totalPages) ? $totalRows : $firstRow + $rowsPerPage - 1;
+        $ret = array(
+            "page"          => $page,
+            "next_page"     => $nextPage,
+            "prev_page"     => $prevPage,
+            "first_page"    => 1,
+            "last_page"     => $totalPages,
+            "first_row"     => $firstRow,
+            "last_row"      => $lastRow,
+            "rows_per_page" => $rowsPerPage,
+            "total_rows"    => $totalRows,
+            "total_pages"   => $totalPages,
+            "rows"          => array()
+        );
+        return $ret;
+    }
+    
     /**
      * Find one row matching fields/values
      *

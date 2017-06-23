@@ -61,6 +61,11 @@ final class TableQueries implements Contracts\CRUD
         return $this->select->query($matches);
     }
 
+    public function selectCount($matches)
+    {
+        return (new Queries\Count($this->select))->query($matches);
+    }
+
     public function findRowByFields($matches)
     {
         return $this->find->query($matches);
